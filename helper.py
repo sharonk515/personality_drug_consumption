@@ -57,4 +57,36 @@ def category_converter(df):
              -0.31685: 'White'}
     df.Ethnicity = df.Ethnicity.apply(lambda x: races[round(x,5)])
     
+    return df
+
+def encoding(df):
+    ''' 
+    Encoding the categorical features as Age, Education and Gender
+    -----------
+    Input: dataframe with age, gender and education as a categorical variable
+    Return: dataframe with age and education as an ordinal variable, gender as dummy variable
+    -----------
+    '''
+    ages = {'18-24': 0,
+            '25-34': 1,
+            '35-44': 2,
+            '45-54': 3,
+            '55-64': 4,
+            '65+': 5}
+    df.Age = df.Age.apply(lambda x: ages[x])
     
+    edu = {'Left school before 16 years': 0,
+           'Left school at 16 years':1,
+           'Left school at 17 years':2,
+           'Left school at 18 years':3,
+           'Some college or university, no certificate or degree':4,
+           'Professional certificate/ diploma':5,
+           'University degree':6,
+           'Masters degree':7,
+           'Doctorate degree':8}
+    
+    df.Education = df.Education.apply(lambda x: edu[x])
+    
+    df.Gender = df.Gender.apply(lambda x: 1 if x=='Male' else 0)
+    
+    return df
