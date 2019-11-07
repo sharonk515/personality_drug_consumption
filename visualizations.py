@@ -151,7 +151,7 @@ def plot_feat_imp(model, df, drug):
         for i, v in enumerate(coefs):
             plt.text(np.abs(v) + 0.007, i - 0.1, str(np.abs(v)), color='black', fontsize=18)
             if v > 0:
-                plt.text(v - 0.04, i - 0.1, '+', color='black', fontsize=18, fontweight='bold')
+                plt.text(v - 0.01, i - 0.1, '+', color='black', fontsize=12, fontweight='bold')
             else:
                 plt.text(np.abs(v) - 0.03, i - 0.1, '-', color='black', fontsize=18, fontweight='bold')
     else:
