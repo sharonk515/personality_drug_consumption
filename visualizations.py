@@ -229,41 +229,38 @@ def plot_feat_imp(model, df, drug):
     Horizontal bar graph showing the importance of features.
     '''
     plt.figure(figsize=(8, 8))
-    if model == 'SVM':
+    if (model == 'SVM') | (model == 'log'):
         plt.barh(df['Feature'],
                  df['Absolute Coefficient'],
                  align='center')
-        sns.despine(left=False, bottom=False)
-        coefs = df['Coefficient'].apply(lambda x: round(x, 2))
-        plt.xticks(fontsize=14)
-        plt.yticks(fontsize=18)
-        plt.xlabel('Feature importance', fontsize=18)
-        plt.ylabel('Feature', fontsize=18)
-        plt.title(f'Predicting {drug} usage\n', fontsize=18)
-        for i, v in enumerate(coefs):
-            plt.text(np.abs(v) + 0.007, i - 0.1,
-                     str(np.abs(v)),
-                     color='black',
-                     fontsize=18)
-            if v > 0:
-                plt.text(v - 0.01, i - 0.1, '+',
-                         color='black',
-                         fontsize=12,
-                         fontweight='bold')
-            else:
-                plt.text(np.abs(v) - 0.03, i - 0.1, '-',
-                         color='black',
-                         fontsize=18,
-                         fontweight='bold')
+        coefs = df['Coefficient'].apply(lambda x: round(x, 2));
+#         for i, v in enumerate(coefs):
+#             plt.text(round(np.abs(v),2) + 0.007, i - 0.1,
+#                      str(np.abs(round(v, 2))),
+#                      color='black',
+#                      fontsize=18)
+#             if v > 0:
+#                 plt.text(v - 0.01, i - 0.1, '+',
+#                          color='black',
+#                          fontsize=12,
+#                          fontweight='bold')
+#             else:
+#                 plt.text(np.abs(v) - 0.03, i - 0.1, '-',
+#                          color='black',
+#                          fontsize=18,
+#                          fontweight='bold');
     else:
         n_features = df.shape[1]
         plt.barh(range(n_features),
                  model.best_estimator_.feature_importances_,
                  align='center')
         plt.yticks(np.arange(n_features), df.columns.values)
-        plt.xlabel('Feature importance')
-        plt.ylabel('Feature')
-        plt.title(f'Feature importance in predicting {drug} usage');
+    sns.despine(left=False, bottom=False)        
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=18)
+    plt.xlabel('Feature importance', fontsize=18)        
+    plt.ylabel('Feature', fontsize=18)
+    plt.title(f'Predicting {drug} usage \n', fontsize=18)
 
 
 def plot_roc_curve(models, model_names,

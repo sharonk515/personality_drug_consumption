@@ -22,20 +22,22 @@ from sklearn.metrics import confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def run_gridsearch(model, grid, X_train, X_test,
-                   y_train, y_test, random_state=None):
+def run_gridsearch(model, grid, X_train, X_test, y_train, y_test,
+                   scoring='accuracy', random_state=None):
     '''
     This function runs gridsearch with various models.
     Parameters
     ----------
     model: function for model
-    (e.g. RandomForestClassifier, AdaBoostClassifier, XGBoostClassifier)
+    (e.g. RandomForestClassifier, LGBMClassifier)
     grid: dict, different parameters
     X_train: DataFrame, train set of variables
     X_test: DataFrame, test set of variables
     y_train: DataFrame, train set of target values
     y_test: DataFrame, test set of target values
-    random_state: int
+    scoring: (optional) str, metric used to evaluate
+    (default = 'accuracy)
+    random_state: (optional) int (default = None)
 
     Returns
     --------
@@ -43,7 +45,7 @@ def run_gridsearch(model, grid, X_train, X_test,
     '''
     gs = GridSearchCV(estimator=model(random_state=random_state),
                       param_grid=grid,
-                      scoring='accuracy',
+                      scoring=scoring,
                       cv=5, verbose=1, n_jobs=-1)
 
     mod = gs.fit(X_train, y_train)
@@ -56,7 +58,8 @@ def run_gridsearch(model, grid, X_train, X_test,
 
 
 def run_gridsearch_scaled(model, grid, X_train_scale, X_test_scale,
-                          y_train, y_test, random_state=None):
+                          y_train, y_test, scoring='accuracy',
+                          random_state=None):
     '''
     This function runs gridsearch with various models.
     Parameters
@@ -68,7 +71,9 @@ def run_gridsearch_scaled(model, grid, X_train_scale, X_test_scale,
     X_test_scale: DataFrame, scaled test set of variables
     y_train: DataFrame, train set of target values
     y_test: DataFrame, test set of target values
-    random_state: int
+    scoring: (optional) str, metric used to evaluate
+    (default = 'accuracy')
+    random_state: (optional) int (default = None)
 
     Returns
     --------
@@ -77,18 +82,18 @@ def run_gridsearch_scaled(model, grid, X_train_scale, X_test_scale,
     if model == KNeighborsClassifier:
         gs = GridSearchCV(estimator=model(),
                           param_grid=grid,
-                          scoring='accuracy',
+                          scoring=scoring,
                           cv=5, verbose=1, n_jobs=-1)
     elif model == 'SVM':
         gs = GridSearchCV(estimator=SVC(probability=True,
                                         random_state=random_state),
                           param_grid=grid,
-                          scoring='accuracy',
+                          scoring=scoring,
                           cv=5, verbose=1, n_jobs=-1)
     else:
         gs = GridSearchCV(estimator=model(random_state=random_state),
                           param_grid=grid,
-                          scoring='accuracy',
+                          scoring=scoring,
                           cv=5, verbose=1, n_jobs=-1)
 
     mod = gs.fit(X_train_scale, y_train)
